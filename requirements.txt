@@ -1,4 +1,5 @@
 flask
-opencv-python
+gunicorn
+opencv-python-headless
 mediapipe
 numpy
