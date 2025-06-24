@@ -1,5 +1,3 @@
-
-# flask_app.py
 from flask import Flask, render_template, request, jsonify
 import cv2
 import numpy as np
@@ -123,5 +121,5 @@ def analyze():
 
     return jsonify({'message': message, 'guidance': guidance.strip(' | ')})
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+# Don't include app.run() for production (Gunicorn handles it)
+
