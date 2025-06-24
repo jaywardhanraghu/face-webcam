@@ -1,3 +1,4 @@
+# flask_app.py
 from flask import Flask, render_template, request, jsonify
 import cv2
 import numpy as np
@@ -10,7 +11,6 @@ app = Flask(__name__)
 mp_face_mesh = mp.solutions.face_mesh
 face_mesh = mp_face_mesh.FaceMesh(static_image_mode=False, max_num_faces=1, refine_landmarks=True)
 
-# Constants
 BRIGHT_LOW = 135
 BRIGHT_HIGH = 190
 SHADOW_THRESHOLD = 15
@@ -121,5 +121,5 @@ def analyze():
 
     return jsonify({'message': message, 'guidance': guidance.strip(' | ')})
 
-# Don't include app.run() for production (Gunicorn handles it)
-
+if __name__ == '__main__':
+    app.run(debug=True)
