@@ -1,0 +1,44 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Face Analysis</title>
+</head>
+<body>
+  <h2>Webcam Face Guidance</h2>
+  <video id="video" autoplay playsinline width="640" height="480"></video>
+  <canvas id="canvas" style="display:none;"></canvas>
+  <p><strong>Message:</strong> <span id="message"></span></p>
+  <p><strong>Guidance:</strong> <span id="guidance"></span></p>
+
+  <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const msg = document.getElementById('message');
+    const guide = document.getElementById('guidance');
+    const ctx = canvas.getContext('2d');
+
+    navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+      video.srcObject = stream;
+    });
+
+    setInterval(() => {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      ctx.drawImage(video, 0, 0);
+      const dataURL = canvas.toDataURL('image/jpeg');
+
+      fetch('/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: dataURL })
+      })
+      .then(res => res.json())
+      .then(data => {
+        msg.textContent = data.message;
+        guide.textContent = data.guidance;
+      });
+    }, 1500);
+  </script>
+</body>
+</html>
